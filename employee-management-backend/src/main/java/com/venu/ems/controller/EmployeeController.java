@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/employees")
 @AllArgsConstructor
@@ -57,7 +59,7 @@ public class EmployeeController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<String> deleteEmployee(@PathVariable("id")  Long employeeId) {
+	public ResponseEntity<String> deleteEmployee(@PathVariable("id") Long employeeId) {
 		employeeService.deleteEmployee(employeeId);
 		return ResponseEntity.ok("Employee Deleted Successsfully");
 	}
