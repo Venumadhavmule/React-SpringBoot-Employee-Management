@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.venu.ems.dto.EmployeeDto;
 import com.venu.ems.service.EmployeeService;
 
-import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +32,7 @@ public class EmployeeController {
 	@PostMapping
 	public ResponseEntity<EmployeeDto> createEployee(@RequestBody EmployeeDto employeeDto) {
 		EmployeeDto savedEmployee = employeeService.createEmployee(employeeDto);
+		log.info("Created employee:{} ", savedEmployee);
 		return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
 	}
 

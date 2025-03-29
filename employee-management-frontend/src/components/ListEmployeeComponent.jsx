@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { listEmployees } from "../services/EmployeeService";
+import { useNavigate } from "react-router-dom";
 
 const ListEmployeeComponent = () => {
   const [employees, setEmployees] = useState([]);
+  const navigator = useNavigate();
 
   useEffect(() => {
     listEmployees()
@@ -13,16 +15,16 @@ const ListEmployeeComponent = () => {
       .catch((error) => {
         console.error("Error while fetching employee details");
       });
-  },[]);
+  }, []);
 
-  const headingStyle = {
-    textAlign: "center",
-    margin: "20px 0",
-  };
+  function addNewEmlpoyee() { 
+    navigator('/add-employee');
+  }
 
   return (
     <div className="container">
-      <h2 style={headingStyle}>List of Employees</h2>
+      <h2 className="text-center">List of Employees</h2>
+      <button className="btn btn-primary mb-2" onClick={addNewEmlpoyee}>Add Employee</button>
       <table className="table table-striped table-bordered">
         <thead>
           <tr>
@@ -33,16 +35,14 @@ const ListEmployeeComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {
-          employees.map((employee) => (
+          {employees.map((employee) => (
             <tr key={employee.id}>
               <td>{employee.id}</td>
               <td>{employee.firstName}</td>
               <td>{employee.lastName}</td>
               <td>{employee.email}</td>
             </tr>
-          ))
-          }
+          ))}
         </tbody>
       </table>
     </div>
