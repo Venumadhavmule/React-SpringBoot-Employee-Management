@@ -15,9 +15,14 @@ const ListEmployeeComponent = () => {
       });
   },[]);
 
+  const headingStyle = {
+    textAlign: "center",
+    margin: "20px 0",
+  };
+
   return (
     <div className="container">
-      <h2>List of Employees</h2>
+      <h2 style={headingStyle}>List of Employees</h2>
       <table className="table table-striped table-bordered">
         <thead>
           <tr>
