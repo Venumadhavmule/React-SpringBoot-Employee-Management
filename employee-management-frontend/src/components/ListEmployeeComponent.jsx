@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { listEmployees } from "../services/EmployeeService";
+import { deleteEmployee, listEmployees } from "../services/EmployeeService";
 import { useNavigate } from "react-router-dom";
 
 const ListEmployeeComponent = () => {
@@ -8,14 +8,16 @@ const ListEmployeeComponent = () => {
   const navigator = useNavigate();
 
   useEffect(() => {
-    listEmployees()
-      .then((response) => {
-        setEmployees(response.data);
-      })
-      .catch((error) => {
-        console.error("Error while fetching employee details");
-      });
+    getAllEmployees();
   }, []);
+
+  function getAllEmployees() {
+    listEmployees().then((response) => {
+      setEmployees(response.data);
+    }).catch((error) => {
+      console.error("Error while fetching employee details");
+    });
+  }
 
   function addNewEmlpoyee() { 
     navigator('/add-employee');
@@ -23,6 +25,15 @@ const ListEmployeeComponent = () => {
 
   function updateEmployee(id) {
     navigator(`/edit-employee/${id}`);
+  }
+
+  function removeEmployee(id){
+    console.log(id);
+    deleteEmployee(id).then((response) => {
+      getAllEmployees();
+    }).catch((error) => {
+      console.error("Error while deleting employee details");
+    })
   }
 
   return (
@@ -47,7 +58,8 @@ const ListEmployeeComponent = () => {
               <td>{employee.lastName}</td>
               <td>{employee.email}</td>
               <td>
-                <button className="btn btn-info" onClick={()=>updateEmployee(employee.id)}>Update</button>
+                <button className="btn btn-info" onClick={()=> updateEmployee(employee.id)}>Update</button>
+                <button className="btn btn-danger" onClick={() => removeEmployee(employee.id)} style={{marginLeft:"10px"}}>Delete</button>
               </td>
             </tr>
           ))}
