@@ -1,28 +1,45 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { listEmployees } from "../services/EmployeeService";
+import { deleteEmployee, listEmployees } from "../services/EmployeeService";
+import { useNavigate } from "react-router-dom";
 
 const ListEmployeeComponent = () => {
   const [employees, setEmployees] = useState([]);
+  const navigator = useNavigate();
 
   useEffect(() => {
-    listEmployees()
-      .then((response) => {
-        setEmployees(response.data);
-      })
-      .catch((error) => {
-        console.error("Error while fetching employee details");
-      });
-  },[]);
+    getAllEmployees();
+  }, []);
 
-  const headingStyle = {
-    textAlign: "center",
-    margin: "20px 0",
-  };
+  function getAllEmployees() {
+    listEmployees().then((response) => {
+      setEmployees(response.data);
+    }).catch((error) => {
+      console.error("Error while fetching employee details");
+    });
+  }
+
+  function addNewEmlpoyee() { 
+    navigator('/add-employee');
+  }
+
+  function updateEmployee(id) {
+    navigator(`/edit-employee/${id}`);
+  }
+
+  function removeEmployee(id){
+    console.log(id);
+    deleteEmployee(id).then((response) => {
+      getAllEmployees();
+    }).catch((error) => {
+      console.error("Error while deleting employee details");
+    })
+  }
 
   return (
     <div className="container">
-      <h2 style={headingStyle}>List of Employees</h2>
+      <h2 className="text-center">List of Employees</h2>
+      <button className="btn btn-primary mb-2" onClick={addNewEmlpoyee}>Add Employee</button>
       <table className="table table-striped table-bordered">
         <thead>
           <tr>
@@ -30,19 +47,22 @@ const ListEmployeeComponent = () => {
             <th>Employee First Name</th>
             <th>Employee Last Name</th>
             <th>Employee Email Id</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {
-          employees.map((employee) => (
+          {employees.map((employee) => (
             <tr key={employee.id}>
               <td>{employee.id}</td>
               <td>{employee.firstName}</td>
               <td>{employee.lastName}</td>
               <td>{employee.email}</td>
+              <td>
+                <button className="btn btn-info" onClick={()=> updateEmployee(employee.id)}>Update</button>
+                <button className="btn btn-danger" onClick={() => removeEmployee(employee.id)} style={{marginLeft:"10px"}}>Delete</button>
+              </td>
             </tr>
-          ))
-          }
+          ))}
         </tbody>
       </table>
     </div>
